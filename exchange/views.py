@@ -1,14 +1,17 @@
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 from exchange.models import Currency, ExchangeRate
 from exchange.serializers import CurrencySerializer, ExchangeRateSerializer
 from django.shortcuts import get_object_or_404
 
-class CurrencyListView(APIView):
-    def get(self, request):
-        currencies = Currency.objects.all()
-        serializer = CurrencySerializer(currencies, many=True)
-        return Response(serializer.data)
+class CurrencyListView(ListAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ['code']
+    ordering = ['code']
 
 class ExchangeRateDetailView(APIView):
     def get(self, request, base_code, target_code):
