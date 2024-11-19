@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 class Currency(models.Model):
     code = models.CharField(max_length=3, unique=True)
@@ -10,6 +11,7 @@ class ExchangeRate(models.Model):
     base_currency = models.ForeignKey(Currency, related_name="rates_base", on_delete=models.CASCADE)
     target_currency = models.ForeignKey(Currency, related_name="rates_target", on_delete=models.CASCADE)
     exchange_rate = models.FloatField()
+    history = HistoricalRecords()
     class Meta:
         unique_together = ('base_currency', 'target_currency')
         
