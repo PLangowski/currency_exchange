@@ -5,6 +5,7 @@ from rest_framework.filters import OrderingFilter
 from exchange.models import Currency, ExchangeRate
 from exchange.serializers import CurrencySerializer, ExchangeRateSerializer
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 
 class CurrencyListView(ListAPIView):
     queryset = Currency.objects.all()
@@ -13,7 +14,21 @@ class CurrencyListView(ListAPIView):
     ordering_fields = ['code']
     ordering = ['code']
 
+    @swagger_auto_schema(
+        operation_description="Retrieve a list of currencies",
+        responses={200: CurrencySerializer(many=True)},
+        tags=['Currency'],
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+
 class ExchangeRateDetailView(APIView):
+    @swagger_auto_schema(
+        operation_description="Retrieve the exchange rate for given currencies",
+        responses={200: ExchangeRateSerializer()},
+        tags=['Currency'],
+    )
     def get(self, request, base_code, target_code):
         base_currency = get_object_or_404(Currency, code=base_code)
         target_currency = get_object_or_404(Currency, code=target_code)

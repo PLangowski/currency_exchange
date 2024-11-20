@@ -2,3 +2,4 @@ django
 djangorestframework
 django-simple-history
 yfinance
+drf-yasg
