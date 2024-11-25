@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'exchange',
     'simple_history',
     'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
